@@ -7,7 +7,6 @@ int main(int argc, char** argv)
 {
     int mux = 0;
     int pga = 0;
-    int mode = 0;
     int dr = 0;
     int c;
     while (1) {
@@ -15,12 +14,11 @@ int main(int argc, char** argv)
         {
             {"mux", required_argument, 0, 'm'},
             {"pga", required_argument, 0, 'p'},
-            {"mode", required_argument, 0, 'o'},
             {"dr", required_argument, 0, 'd'},
             {0, 0, 0, 0}
         };
         int option_index = 0;
-        c = getopt_long(argc, argv, "d:p:m:o:", long_options, &option_index);
+        c = getopt_long(argc, argv, "d:p:m:", long_options, &option_index);
 
         if (c == -1) break;
         switch (c)
@@ -93,16 +91,6 @@ int main(int argc, char** argv)
                     exit(1);
                 }
                 break;
-            case 'o':
-                if (strcmp(optarg, "continuous") == 0) {
-                    mode = 0b0;
-                } else if (strcmp(optarg, "singleshot") == 0) {
-                    mode = 0b1;
-                } else {
-                    fprintf(stderr, "Invalid MODE option: %s\n", optarg);
-                    exit(1);
-                }
-                break;
             case '?':
                 /* getopt_long already printed an error message. */
                 break;
@@ -115,6 +103,6 @@ int main(int argc, char** argv)
         while (optind < argc) fprintf(stderr, "%s ", argv[optind++]);
         fprintf(stderr, "\n");
     }
-    fprintf(stderr, "DR: %d\nPGA: %d\nMUX: %d\nMODE: %d\n", dr, pga, mux, mode);
+    fprintf(stderr, "DR: %d\nPGA: %d\nMUX: %d\n", dr, pga, mux);
     exit(0);
 }
