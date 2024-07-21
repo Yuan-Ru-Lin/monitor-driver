@@ -3,7 +3,7 @@
 #include <getopt.h>
 #include <string.h>
 
-int main(int argc, char** argv)
+void parse(int argc, char** argv)
 {
     int mux = 0;
     int pga = 0;
@@ -104,5 +104,4 @@ int main(int argc, char** argv)
         fprintf(stderr, "\n");
     }
     fprintf(stderr, "DR: %d\nPGA: %d\nMUX: %d\n", dr, pga, mux);
-    exit(0);
 }
