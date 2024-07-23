@@ -153,21 +153,15 @@ void configurate(int file, char configcode[3])
     write(file, READCODE, 1);    // 1 is just the length of READCODE
 }
 
-int convertADCOutputToInt16(char* data)
-{
-    int raw_adc = (data[0] << 8) | data[1];
-    if (raw_adc > 32767) raw_adc -= 65535;
-    return raw_adc;
-}
-
-int readADCOutputAsInt16From(int file)
+int16_t readADCOutputAsInt16From(int file)
 {
     char data[2] = {0};
     if (read(file, data, 2) != 2) {
         perror("I/O error");
         exit(5);
     };
-    return convertADCOutputToInt16(data);
+    int16_t res = data[0] << 8 | data[1];
+    return res;
 }
 
 int main(int argc, char** argv)
