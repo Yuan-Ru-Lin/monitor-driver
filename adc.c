@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -31,6 +32,12 @@ const int COMP_QUE  = 0b11;
 
 const char READCODE[1] = {ADS1115_CONVERSION_REG};
 
+void get_timestamp(char* buffer, size_t size) {
+    time_t now = time(NULL);
+    struct tm tm_now;
+    localtime_r(&now, &tm_now);
+    strftime(buffer, size, "%Y-%m-%dT%H:%M:%S%z", &tm_now);
+}
 
 void parse(int argc, char** argv)
 {
@@ -178,12 +185,21 @@ int main(int argc, char** argv)
 
     int sleep_time_microsecond = (int)ceil(1.0/dr_sps*1000000);
 
+    char time_buffer[50] = {0};
     int value = 0;
     while (1) {
+        get_timestamp(time_buffer, 50);
         value = readADCOutputAsInt16From(file);
-        fprintf(stdout, "%d\n", value); fflush(stdout);
+        fprintf(stdout, "%s\t%d\n", time_buffer, value); fflush(stdout);
 
-        usleep(sleep_time_microsecond);
+	// XXX:
+	// Currently the way we get timestamps limits its resolution to 1 second.
+	// The best solution is to use better timing mechanism.
+	// The second best solution is to get values using the fastest clock and
+	// then average those values;
+	// Due to time limit, I will use a temporary fix -- sample once every second.
+        //usleep(sleep_time_microsecond);
+	sleep(1);
     }
 
     return 0;
