@@ -1,3 +1,4 @@
+#include "lcd2004.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -174,6 +175,7 @@ int16_t readADCOutputAsInt16From(int file)
 int main(int argc, char** argv)
 {
     int file = setup("/dev/i2c-1");
+    int lcd_fd = wiringPiI2CSetup(LCDAddr); init(lcd_fd);
 
     parse(argc, argv);  // update MUX, PGA and DR
 
@@ -186,11 +188,13 @@ int main(int argc, char** argv)
     int sleep_time_microsecond = (int)ceil(1.0/dr_sps*1000000);
 
     char time_buffer[50] = {0};
+    char lcd_buffer[50] = {0};
     int value = 0;
     while (1) {
         get_timestamp(time_buffer, 50);
         value = readADCOutputAsInt16From(file);
         fprintf(stdout, "%s\t%d\n", time_buffer, value); fflush(stdout);
+        sprintf(lcd_buffer, "%d", value); writelcd(lcd_fd, 0, 0, lcd_buffer);
 
 	// XXX:
 	// Currently the way we get timestamps limits its resolution to 1 second.
