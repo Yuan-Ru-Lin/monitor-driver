@@ -194,7 +194,7 @@ int main(int argc, char** argv)
         get_timestamp(time_buffer, 50);
         value = readADCOutputAsInt16From(file);
         fprintf(stdout, "%s\t%d\n", time_buffer, value); fflush(stdout);
-        sprintf(lcd_buffer, "%d", value); writelcd(lcd_fd, 0, 0, lcd_buffer);
+        sprintf(lcd_buffer, "%.2e mbar", pow(10, -11.571813 + 21.018599 * (double)value / 32767)); writelcd(lcd_fd, 0, 0, lcd_buffer);
 
 	// XXX:
 	// Currently the way we get timestamps limits its resolution to 1 second.
