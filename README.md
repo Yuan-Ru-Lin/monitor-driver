@@ -1,7 +1,8 @@
 
 ## TODO
 
-- [ ] Use `int16_t` to get rid of `convertADCOutputToInt16`
+- [ ] Get rid of calibration constants in the source code
+- [x] Use `int16_t` to get rid of `convertADCOutputToInt16`
 - [x] Make `configcode` an argument of `configurate`
 - [x] Make `COMMAND1` and `COMMAND2` variables that will be decided during run time
 - [x] Incorporate `parse.c` into `main`
